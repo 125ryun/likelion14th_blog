@@ -4,9 +4,12 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import likelion14th.blog.domain.Article;
 import likelion14th.blog.dto.response.ArticleDetailResponse;
+import likelion14th.blog.dto.response.ArticleSummaryResponse;
 import likelion14th.blog.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,14 @@ public class ArticleService {
                         .findById(id)
                         .orElseThrow(() -> new EntityNotFoundException("해당 ID의 게시물을 찾을 수 없습니다."));
         return ArticleDetailResponse.from(article);
+    }
+
+    @Transactional
+    public List<ArticleSummaryResponse> getArticles() {
+        List<Article> articles = articleRepository.findAll();
+        return articles.stream()
+                .map(ArticleSummaryResponse::from)
+                .toList();
     }
 
     @Transactional()
