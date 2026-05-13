@@ -1,4 +1,4 @@
-package likelion14th.blog;
+package likelion14th.blog.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,13 +25,13 @@ public class Article {
     private String content;
 
     @Column(nullable = false)
+    private String author;
+
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private String author;
 
     public Article(String title, String content, String author,  String password) {
         this.title = title;
