@@ -9,6 +9,8 @@ import likelion14th.blog.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -27,4 +29,12 @@ public class CommentService {
 
         return CommentResponse.of(article.getId(), comment);
     }
+
+    public List<CommentResponse> getComments(Long articleId) {
+        List<Comment> comments = commentRepository.findByArticleId(articleId);
+        return comments.stream()
+                .map(comment -> CommentResponse.of(articleId, comment))
+                .toList();
+    }
+
 }
