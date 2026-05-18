@@ -18,10 +18,10 @@ public class Comment {
     private Long id;
 
     @Column(nullable = false)
-    private String author;
+    private String content;
 
     @Column(nullable = false)
-    private String content;
+    private String author;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -31,8 +31,8 @@ public class Comment {
     private Article article;
 
     public Comment(String author, String content, Article article) {
-        this.author = author;
         this.content = content;
+        this.author = author;
         this.createdAt = LocalDateTime.now();
         this.article = article;
     }
