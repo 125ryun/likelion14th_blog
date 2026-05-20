@@ -44,10 +44,35 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    private ResponseEntity<ApiResponse<List<String>>> handleValidationExceptions(
+            MethodArgumentNotValidException e
+    ) {
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                "입력값이 유효하지 않습니다.",
+                getErrorFields(e)
+        );
+    }
+
+    private static List<String> getErrorFields(MethodArgumentNotValidException e) {
+        return e.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                .collect(Collectors.toList());
+    }
+
     private ResponseEntity<ApiResponse<Void>> buildErrorResponse(HttpStatus status, String message) {
         return ResponseEntity
                 .status(status)
                 .body(ApiResponse.fail(status.value(), message));
+    }
+
+    private <T> ResponseEntity<ApiResponse<T>> buildErrorResponse(HttpStatus status, String message, T data) {
+        return ResponseEntity
+                .status(status)
+                .body(ApiResponse.fail(status.value(), message, data));
     }
 
 }
