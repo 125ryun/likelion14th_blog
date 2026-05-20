@@ -44,20 +44,32 @@ public class ArticleService {
     }
 
     @Transactional()
-    public ArticleDetailResponse updateArticle(Long id, String title, String content) {
+    public ArticleDetailResponse updateArticle(Long id, String title, String content, String password) {
         Article article =
                 articleRepository
                         .findById(id)
                         .orElseThrow(() -> new EntityNotFoundException("해당 ID의 게시물을 찾을 수 없습니다."));
+
+        if (!article.getPassword().equals(password)){
+            throw new RuntimeException("해당 게시글에 대한 수정 권한이 없습니다.");
+        }
+
         article.update(title, content);
         articleRepository.save(article);
         return ArticleDetailResponse.from(article);
     }
 
     @Transactional()
-    public Void deleteArticle(Long id) {
-        articleRepository.deleteById(id);
-        return null;
+    public void deleteArticle(Long id, String password) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 게시글을 찾을 수 없습니다."));
+
+        if (!article.getPassword().equals(password)){
+            throw new RuntimeException("해당 게시글에 대한 삭제 권한이 없습니다.");
+        }
+
+//        articleRepository.deleteById(id);
+        articleRepository.delete(article);
     }
 
 }

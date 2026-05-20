@@ -1,6 +1,7 @@
 package likelion14th.blog.controller;
 
 import likelion14th.blog.dto.request.ArticleRequest;
+import likelion14th.blog.dto.request.DeleteArticleRequest;
 import likelion14th.blog.dto.request.UpdateArticleRequest;
 import likelion14th.blog.dto.response.ApiResponse;
 import likelion14th.blog.dto.response.ArticleDetailResponse;
@@ -55,14 +56,17 @@ public class ArticleController {
             @RequestBody UpdateArticleRequest request
             ) {
         ArticleDetailResponse articleDetailResponse =
-                articleService.updateArticle(id, request.getTitle(), request.getContent());
+                articleService.updateArticle(id, request.getTitle(), request.getContent(), request.getPassword());
         return ResponseEntity.ok(
                 ApiResponse.success(200, "게시글을 업데이트 했습니다.", articleDetailResponse));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteArticle (@PathVariable Long id) {
-        articleService.deleteArticle(id);
+    public ResponseEntity<ApiResponse<Void>> deleteArticle (
+            @PathVariable Long id,
+            @RequestBody DeleteArticleRequest deleteArticleRequest
+    ) {
+        articleService.deleteArticle(id, deleteArticleRequest.getPassword());
         return ResponseEntity.ok(
                 ApiResponse.success(204, "게시물을 삭제했습니다."));
     }
