@@ -55,6 +55,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
+        return buildErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "서버 내부 오류가 발생했습니다."
+        );
+    }
+
     private static List<String> getErrorFields(MethodArgumentNotValidException e) {
         return e.getBindingResult()
                 .getFieldErrors()
