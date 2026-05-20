@@ -1,5 +1,6 @@
 package likelion14th.blog.controller;
 
+import jakarta.validation.Valid;
 import likelion14th.blog.dto.request.ArticleRequest;
 import likelion14th.blog.dto.request.DeleteArticleRequest;
 import likelion14th.blog.dto.request.UpdateArticleRequest;
@@ -22,7 +23,9 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @PostMapping()
-    public ResponseEntity<ApiResponse<ArticleDetailResponse>> addArticle(@RequestBody ArticleRequest request) {
+    public ResponseEntity<ApiResponse<ArticleDetailResponse>> addArticle(
+            @Valid @RequestBody ArticleRequest request
+    ) {
         ArticleDetailResponse articleDetailResponse =
                 articleService.addArticle(
                         request.getTitle(),
